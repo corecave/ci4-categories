@@ -35,9 +35,9 @@
 					</template>
 				</select>
 			</div>
-			<div class="flex flex-col w-full ml-2">
+			<div class="flex flex-col w-full mx-2">
 				<label for="sub" class="py-2">Sub Category</label>
-				<select name="sub" id="sub" class="p-3 w-full" :disabled="loadingChilds">
+				<select name="sub" id="sub" class="p-3 w-full" :disabled="loadingChilds" x-model="selectedChild">
 					<template x-if="loadingChilds">
 						<option value="" selected>
 							Loading...
@@ -53,6 +53,24 @@
 					</template>
 				</select>
 			</div>
+			<div class="flex flex-col w-full ml-2">
+				<label for="sub" class="py-2">Sub-Sub Category</label>
+				<select name="sub" id="sub" class="p-3 w-full" :disabled="loadingSubChilds">
+					<template x-if="loadingSubChilds">
+						<option value="" selected>
+							Loading...
+						</option>
+					</template>
+					<template x-if="!loadingSubChilds">
+						<option value="" selected>
+							-- Choose --
+						</option>
+					</template>
+					<template x-for="grandchild in grandchilds">
+						<option :value="grandchild.id" x-text="grandchild.title"></option>
+					</template>
+				</select>
+			</div>
 		</div>
 	</div>
 
@@ -64,9 +82,12 @@
 					baseURL: "<?= env('app.baseURL') ?>",
 					loading: false,
 					loadingChilds: false,
+					loadingSubChilds: false,
 					selectedParent: "",
+					selectedChild: "",
 					parents: [],
 					childs: [],
+					grandchilds: [],
 
 
 					init: function() {
@@ -74,6 +95,9 @@
 
 						this.$watch('selectedParent', ($value) => {
 							this.fetchChilds($value)
+						});
+						this.$watch('selectedChild', ($value) => {
+							this.fetchSubChilds($value)
 						});
 
 					},
@@ -92,6 +116,17 @@
 						}
 
 						this.loadingChilds = false;
+					},
+					fetchSubChilds: async function(category) {
+						this.loadingSubChilds = true;
+
+						if (!category) {
+							this.grandchilds = [];
+						} else {
+							this.grandchilds = await this.fetch(`${this.baseURL}/category/childs/` + category);
+						}
+
+						this.loadingSubChilds = false;
 					},
 					fetch: async function(url) {
 						const resp = await fetch(url, {

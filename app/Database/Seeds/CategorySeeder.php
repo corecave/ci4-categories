@@ -24,5 +24,9 @@ class CategorySeeder extends Seeder
 		foreach (range(1,10) as $id) {
 			$this->db->query('UPDATE `'. env('database.default.DBPrefix', '') .'categories` SET `parent_id`=NULL WHERE `id`=:id:', compact('id'));
 		}
+
+		foreach (range(20, 50) as $id) {
+			$this->db->query('UPDATE `' . env('database.default.DBPrefix', '') . 'categories` SET `parent_id`= ROUND((RAND() * (50-10))+10) WHERE `id`=:id:', compact('id'));
+		}
 	}
 }
