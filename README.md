@@ -4,6 +4,13 @@
 
 CodeIgniter Application that shows multi-level categories using only one table.
 
+## Technologies Used
+
+1. [Alpinejs](https://alpinejs.dev).
+2. [Tailwindcss](https://tailwindcss.com/docs).
+3. [Faker PHP](https://fakerphp.github.io/).
+3. [Codeigniter 4](https://codeigniter.com/).
+
 ## Installation & updates
 1. Clone this repo `git clone https://github.com/corecave/ci4-categories`.
 
